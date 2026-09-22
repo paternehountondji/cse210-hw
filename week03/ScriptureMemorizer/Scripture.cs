@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 public class Scripture
@@ -9,19 +10,45 @@ public class Scripture
     {
         _reference = reference;
         _words = new List<Word>();
+
+        string[] wordArray = text.Split(" ");
+        foreach (string w in wordArray)
+        {
+            Word word = new Word(w);
+            _words.Add(word);
+        }
     }
 
     public void HideRandomWords(int numberToHide)
     {
+        Random random = new Random();
+
+        for (int i = 0; i < numberToHide; i++)
+        {
+            int index = random.Next(0, _words.Count);
+            _words[index].Hide();
+        }
     }
 
     public string GetDisplayText()
     {
-        return "";
+        string result = "";
+        foreach (Word word in _words)
+        {
+            result += word.GetDisplayText() + " ";
+        }
+        return result;
     }
 
     public bool IsCompletelyHidden()
     {
-        return false;
+        foreach (Word word in _words)
+        {
+            if (!word.IsHidden())
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }
